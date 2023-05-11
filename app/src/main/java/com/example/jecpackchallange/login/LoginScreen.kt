@@ -50,6 +50,9 @@ fun LoginScreen(
         onAddEmail = {
             viewModel.onTriggerEvent(LoginEvent.OnAddEmail)
         },
+        onDeleteEmail = {
+            viewModel.onTriggerEvent(LoginEvent.OnEmailDeleted(it))
+        },
         phoneList = uiState.phoneItemList,
         onPhoneChanged = { index, phone ->
             viewModel.onTriggerEvent(LoginEvent.OnPhoneChanged(index, phone))
@@ -58,6 +61,9 @@ fun LoginScreen(
             viewModel.onTriggerEvent(LoginEvent.OnPhoneLabelChanged(index, label))
         },
         onAddPhone = { viewModel.onTriggerEvent(LoginEvent.OnAddPhone) },
+        onDeletePhone = {
+            viewModel.onTriggerEvent(LoginEvent.OnPhoneDeleted(it))
+        },
         website = uiState.site,
         onWebsiteChanged = {
             viewModel.onTriggerEvent(LoginEvent.OnWebsiteChanged(it))
@@ -80,10 +86,12 @@ private fun LoginScreenContent(
     onEmailChanged: (Int, String) -> Unit,
     onEmailLabelChanged: (Int, String) -> Unit,
     onAddEmail: () -> Unit,
+    onDeleteEmail: (Int) -> Unit,
     phoneList: List<LoginItems>,
     onPhoneChanged: (Int, String) -> Unit,
     onPhoneLabelChanged: (Int, String) -> Unit,
     onAddPhone: () -> Unit,
+    onDeletePhone: (Int) -> Unit,
     website: String,
     onWebsiteChanged: (String) -> Unit,
     onRegisterClicked: () -> Unit,
@@ -173,7 +181,9 @@ private fun LoginScreenContent(
                 },
                 isPrimary = false,
                 onAddItem = onAddEmail,
-                onDeleteItem = {},
+                onDeleteItem = {
+                    onDeleteEmail(index)
+                },
                 onSelectAsPrimaryClicked = {},
                 icon = Icons.Outlined.Email,
                 keyboardOptions = KeyboardOptions(
@@ -197,7 +207,9 @@ private fun LoginScreenContent(
                 },
                 isPrimary = false,
                 onAddItem = onAddPhone,
-                onDeleteItem = {},
+                onDeleteItem = {
+                    onDeletePhone(index)
+                },
                 onSelectAsPrimaryClicked = {},
                 icon = Icons.Outlined.Phone,
                 keyboardOptions = KeyboardOptions(
@@ -268,6 +280,7 @@ private fun Prev() {
         onAddPhone = {},
         website = "test.com", onWebsiteChanged = {},
         onRegisterClicked = {},
-        fullDate = "1390/9/1", onDateChanged = {}
+        fullDate = "1390/9/1", onDateChanged = {},
+        onDeleteEmail = {}, onDeletePhone = {}
     )
 }

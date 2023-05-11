@@ -31,6 +31,11 @@ class LoginViewModel(): ViewModel() {
                 list.add(LoginItems("", "", false))
                 _loginState.update { it.copy(emailItemList = list.toList()) }
             }
+            is LoginEvent.OnEmailDeleted -> {
+                val list = _loginState.value.emailItemList.toMutableList()
+                list.removeAt(eventType.index)
+                _loginState.update { it.copy(emailItemList = list.toList()) }
+            }
             is LoginEvent.OnPhoneChanged -> {
                 val list = _loginState.value.phoneItemList.toMutableList()
                 val item = list[eventType.index]
@@ -46,6 +51,11 @@ class LoginViewModel(): ViewModel() {
             is LoginEvent.OnAddPhone -> {
                 val list = _loginState.value.phoneItemList.toMutableList()
                 list.add(LoginItems("", "", false))
+                _loginState.update { it.copy(phoneItemList = list.toList()) }
+            }
+            is LoginEvent.OnPhoneDeleted -> {
+                val list = _loginState.value.phoneItemList.toMutableList()
+                list.removeAt(eventType.index)
                 _loginState.update { it.copy(phoneItemList = list.toList()) }
             }
             is LoginEvent.OnWebsiteChanged -> {

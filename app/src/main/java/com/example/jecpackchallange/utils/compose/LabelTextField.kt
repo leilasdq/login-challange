@@ -7,7 +7,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,7 +66,7 @@ fun LabelTextField(
             Spacer(modifier = Modifier.size(8.dp))
             if (showDeleteIcon) {
                 Icon(
-                    imageVector = Icons.Outlined.Delete,
+                    imageVector = Icons.Outlined.Close,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {

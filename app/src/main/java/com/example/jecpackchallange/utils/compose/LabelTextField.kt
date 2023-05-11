@@ -2,6 +2,8 @@ package com.example.jecpackchallange.utils.compose
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -9,7 +11,11 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -24,7 +30,10 @@ fun LabelTextField(
     onAddItem: () -> Unit,
     onDeleteItem: () -> Unit,
     onSelectAsPrimaryClicked: (Boolean) -> Unit,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    focusManager: FocusManager,
+    showDeleteIcon: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -42,18 +51,27 @@ fun LabelTextField(
                     onValueChange = {
                         onItemValueChanged.invoke(it)
                     },
-                    icon = icon
+                    icon = icon,
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                 )
             }
-
-            Icon(
-                imageVector = Icons.Outlined.Delete,
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable {
-                        onDeleteItem()
-                    }
-            )
+            Spacer(modifier = Modifier.size(8.dp))
+            if (showDeleteIcon) {
+                Icon(
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable {
+                            onDeleteItem()
+                        }
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -65,7 +83,16 @@ fun LabelTextField(
                     value = itemLabel,
                     onValueChange = {
                         onItemLabelChanged.invoke(it)
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(
+                                FocusDirection.Down
+                            )
+                        }),
                 )
             }
             ChallengeCheckBox(
@@ -73,6 +100,7 @@ fun LabelTextField(
                 onCheckBoxSelectionClicked = { onSelectAsPrimaryClicked.invoke(it) },
                 isSelected = isPrimary
             )
+            Spacer(modifier = Modifier.size(8.dp))
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
@@ -94,6 +122,8 @@ private fun PrevForItems() {
         label = "email", itemValue = "email@gmail", itemLabel = "work",
         onItemLabelChanged = {}, onItemValueChanged = {},
         isPrimary = true, onSelectAsPrimaryClicked = {},
-        onAddItem = {}, onDeleteItem = {}
+        onAddItem = {}, onDeleteItem = {},
+        focusManager = LocalFocusManager.current,
+        showDeleteIcon = true
     )
 }

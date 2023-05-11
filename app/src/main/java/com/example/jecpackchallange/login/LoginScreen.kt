@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jecpackchallange.utils.compose.ChallengeTextField
@@ -86,6 +92,8 @@ private fun LoginScreenContent(
     fullDate: String,
     onDateChanged: (String) -> Unit
 ) {
+
+    val focusManager = LocalFocusManager.current
     var pickedDate by remember {
         mutableStateOf(LocalDate.now())
     }
@@ -141,12 +149,22 @@ private fun LoginScreenContent(
             label = "name",
             value = name,
             onValueChange = { onNameChanged(it) },
-            icon = Icons.Outlined.Person
+            icon = Icons.Outlined.Person,
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.moveFocus(
+                        FocusDirection.Down
+                    )
+                }),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Text
+            ),
         )
         LabelTextField(
             label = "email",
-            itemValue = if (emailList.isEmpty().not()) emailList[0] else "",
-            itemLabel = if (emailLabelList.isEmpty().not()) emailLabelList[0] else "",
+            itemValue = emailList[0],
+            itemLabel = emailLabelList[0],
             onItemValueChanged = {
                 onEmailChanged(0, it)
             },
@@ -157,12 +175,18 @@ private fun LoginScreenContent(
             onAddItem = onAddEmail,
             onDeleteItem = {},
             onSelectAsPrimaryClicked = {},
-            icon = Icons.Outlined.Email
+            icon = Icons.Outlined.Email,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email
+            ),
+            focusManager = focusManager,
+            showDeleteIcon = emailList.size > 1
         )
         LabelTextField(
             label = "phone",
-            itemValue = if (phoneList.isEmpty().not()) phoneList[0] else "",
-            itemLabel = if (phoneLabelList.isEmpty().not()) phoneLabelList[0] else "",
+            itemValue = phoneList[0],
+            itemLabel = phoneLabelList[0],
             onItemValueChanged = {
                 onPhoneChanged(0, it)
             },
@@ -173,13 +197,27 @@ private fun LoginScreenContent(
             onAddItem = onAddPhone,
             onDeleteItem = {},
             onSelectAsPrimaryClicked = {},
-            icon = Icons.Outlined.Phone
+            icon = Icons.Outlined.Phone,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Phone
+            ),
+            focusManager = focusManager,
+            showDeleteIcon = phoneList.size > 1
         )
         ChallengeTextField(
             label = "website",
             value = website,
             onValueChange = {onWebsiteChanged(it) },
-            icon = Icons.Outlined.Link
+            icon = Icons.Outlined.Link,
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusManager.clearFocus()
+                }),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Uri
+            )
         )
         ChallengeTextField(
             label = "birthday",

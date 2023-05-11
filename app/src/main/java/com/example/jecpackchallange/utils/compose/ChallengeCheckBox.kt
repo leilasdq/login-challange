@@ -17,12 +17,12 @@ fun ChallengeCheckBox(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        Text(text = value)
         Checkbox(
             checked = isSelected,
             onCheckedChange = {
                 onCheckBoxSelectionClicked.invoke(it)
             },
         )
+        Text(text = value)
     }
 }

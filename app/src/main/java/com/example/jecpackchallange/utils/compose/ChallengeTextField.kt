@@ -20,7 +20,10 @@ fun ChallengeTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    readOnly: Boolean = false,
+    enable: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -38,7 +41,11 @@ fun ChallengeTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            label = { Text(text = label) }
+            label = { Text(text = label) },
+            readOnly = readOnly,
+            enabled = enable,
+            modifier = modifier
+                .fillMaxWidth()
         )
     }
 }

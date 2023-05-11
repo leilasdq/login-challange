@@ -1,20 +1,34 @@
 package com.example.jecpackchallange.login
 
+import android.util.Log
+import android.widget.DatePicker
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jecpackchallange.R
 import com.example.jecpackchallange.utils.compose.ChallengeTextField
 import com.example.jecpackchallange.utils.compose.LabelTextField
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun LoginScreen(
@@ -40,8 +54,39 @@ private fun LoginScreenContent(
     onAddPhone: () -> Unit,
     website: String,
     onWebsiteChanged: (String) -> Unit,
-    onRegisterClicked: () -> Unit
+    onRegisterClicked: () -> Unit,
+    fullDate: String,
+    onDateChanged: (String) -> Unit
 ) {
+    var pickedDate by remember {
+        mutableStateOf(LocalDate.now())
+    }
+    val formattedDate by remember {
+        derivedStateOf {
+            DateTimeFormatter
+                .ofPattern("MMM dd yyyy")
+                .format(pickedDate)
+        }
+    }
+    val dateDialogState = rememberMaterialDialogState()
+
+    MaterialDialog(
+        dialogState = dateDialogState,
+        buttons = {
+            positiveButton(text = "Ok") {
+                onDateChanged(formattedDate)
+            }
+            negativeButton(text = "Cancel")
+        }
+    ) {
+        datepicker(
+            initialDate = LocalDate.now(),
+            title = "Pick a date",
+        ) {
+            pickedDate = it
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,8 +147,30 @@ private fun LoginScreenContent(
             label = "website",
             value = website,
             onValueChange = {onWebsiteChanged(it) },
-
+            icon = Icons.Outlined.Link
         )
+        ChallengeTextField(
+            label = "birthday",
+            value = fullDate,
+            onValueChange = { },
+            readOnly = true,
+            enable = false,
+            modifier = Modifier.clickable {
+                dateDialogState.show()
+            },
+            icon = Icons.Outlined.DateRange
+        )
+    }
+}
+
+private fun showDatePicker(
+    activity : AppCompatActivity,
+    updatedDate: (Long?) -> Unit)
+{
+    val picker = MaterialDatePicker.Builder.datePicker().build()
+    picker.show(activity.supportFragmentManager, picker.toString())
+    picker.addOnPositiveButtonClickListener {
+        updatedDate(it)
     }
 }
 
@@ -119,6 +186,7 @@ private fun Prev() {
         onPhoneChanged = { _, _ -> Unit }, onPhoneLabelChanged = { _, _ -> Unit },
         onAddPhone = {},
         website = "test.com", onWebsiteChanged = {},
-        onRegisterClicked = {}
+        onRegisterClicked = {},
+        fullDate = "1390/9/1", onDateChanged = {}
     )
 }

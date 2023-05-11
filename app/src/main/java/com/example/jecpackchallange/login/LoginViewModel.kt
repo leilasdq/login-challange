@@ -92,7 +92,53 @@ class LoginViewModel @Inject constructor(): ViewModel() {
     }
 
     private fun checkItems() {
+        val emailList = loginState.value.emailItemList.toMutableList()
+        val phoneList = loginState.value.phoneItemList.toMutableList()
+        val name = loginState.value.name
+        val site = loginState.value.site
 
+        emailList.forEachIndexed { index, items ->
+            val msg = messageBaseOnEmailValidation(items.value)
+            if (msg != null)
+                emailList[index] = LoginItems(items.value, items.label, items.isPrimary, msg)
+        }
+        phoneList.forEachIndexed { index, items ->
+            val msg = messageBaseOnPhoneValidation(items.value)
+            if (msg != null)
+                phoneList[index] = LoginItems(items.value, items.label, items.isPrimary, msg)
+        }
+
+        _loginState.update { it.copy(
+            emailItemList = emailList,
+            phoneItemList = phoneList,
+            nameError = messageBaseOnNameValidation(name),
+            siteError = messageBaseOnWebsiteValidation(site),
+        ) }
+    }
+
+    private fun messageBaseOnEmailValidation(email: String): String? {
+        return if (email.isNullOrEmpty()) "can't be empty"
+        else if (android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches().not()) "email format is not correct"
+        else null
+    }
+
+    private fun messageBaseOnWebsiteValidation(site: String): String? {
+        return if (site.isNullOrEmpty()) "can't be empty"
+        else if (android.util.Patterns.WEB_URL.matcher(site.trim()).matches().not()) "url link format is not correct"
+        else null
+    }
+
+    private fun messageBaseOnPhoneValidation(phone: String): String? {
+        return if (phone.isNullOrEmpty()) "can't be empty"
+        else if (phone.length < 11) "phone should have 11 char"
+        else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) "phone format is not correct"
+        else null
+    }
+
+    private fun messageBaseOnNameValidation(name: String): String? {
+        return if (name.isNullOrEmpty()) "can't be empty"
+        else if (name.length < 5) "too short!"
+        else null
     }
 
     private fun <T> updateLists(list: List<T>, index: Int, newValue: T): List<T> {

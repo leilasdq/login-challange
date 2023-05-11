@@ -2,7 +2,9 @@ package com.example.jecpackchallange.login
 
 data class LoginState(
     val name: String = "",
+    val nameError: String? = null,
     val site: String = "",
+    val siteError: String? = null,
     val birthday: String = "",
     val emailItemList: List<LoginItems> = listOf(LoginItems("", "", true)),
     val phoneItemList: List<LoginItems> = listOf(LoginItems("", "", true)),
@@ -28,5 +30,6 @@ sealed class LoginEvent {
 data class LoginItems(
     val value: String,
     val label: String,
-    var isPrimary: Boolean
+    var isPrimary: Boolean,
+    val error: String? = null
 )

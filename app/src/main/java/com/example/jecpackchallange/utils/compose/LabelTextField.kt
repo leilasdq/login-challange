@@ -33,7 +33,9 @@ fun LabelTextField(
     icon: ImageVector? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     focusManager: FocusManager,
-    showDeleteIcon: Boolean
+    showDeleteIcon: Boolean,
+    isError: Boolean = false,
+    errorMessage: String? = null
 ) {
     Column(
         modifier = Modifier
@@ -59,6 +61,8 @@ fun LabelTextField(
                                 FocusDirection.Down
                             )
                         }),
+                    isError = isError,
+                    errorMessage = errorMessage
                 )
             }
             Spacer(modifier = Modifier.size(8.dp))

@@ -40,6 +40,7 @@ fun LoginScreen(
         onNameChanged = {
             viewModel.onTriggerEvent(LoginEvent.OnNameChanged(it))
         },
+        nameError = uiState.nameError,
         emailList = uiState.emailItemList,
         onEmailChanged = { index, email ->
             viewModel.onTriggerEvent(LoginEvent.OnEmailChanged(index, email))
@@ -74,6 +75,7 @@ fun LoginScreen(
         onWebsiteChanged = {
             viewModel.onTriggerEvent(LoginEvent.OnWebsiteChanged(it))
         },
+        siteError = uiState.siteError,
         onRegisterClicked = {
             viewModel.onTriggerEvent(LoginEvent.OnRegisterClicked)
         },
@@ -88,6 +90,7 @@ fun LoginScreen(
 private fun LoginScreenContent(
     name: String,
     onNameChanged: (String) -> Unit,
+    nameError: String?,
     emailList: List<LoginItems>,
     onEmailChanged: (Int, String) -> Unit,
     onEmailLabelChanged: (Int, String) -> Unit,
@@ -102,6 +105,7 @@ private fun LoginScreenContent(
     onPhonePrimaryStateChanged: (Int, Boolean) -> Unit,
     website: String,
     onWebsiteChanged: (String) -> Unit,
+    siteError: String?,
     onRegisterClicked: () -> Unit,
     fullDate: String,
     onDateChanged: (String) -> Unit
@@ -175,6 +179,8 @@ private fun LoginScreenContent(
                 imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Text
             ),
+            isError = nameError != null,
+            errorMessage = nameError
         )
         emailList.forEachIndexed { index, loginItem ->
             LabelTextField(
@@ -201,7 +207,9 @@ private fun LoginScreenContent(
                     keyboardType = KeyboardType.Email
                 ),
                 focusManager = focusManager,
-                showDeleteIcon = loginItem.isPrimary.not()
+                showDeleteIcon = loginItem.isPrimary.not(),
+                isError = loginItem.error != null,
+                errorMessage = loginItem.error
             )
         }
         phoneList.forEachIndexed { index, loginItem ->
@@ -229,7 +237,9 @@ private fun LoginScreenContent(
                     keyboardType = KeyboardType.Phone
                 ),
                 focusManager = focusManager,
-                showDeleteIcon = loginItem.isPrimary.not()
+                showDeleteIcon = loginItem.isPrimary.not(),
+                isError = loginItem.error != null,
+                errorMessage = loginItem.error
             )
         }
         ChallengeTextField(
@@ -244,7 +254,9 @@ private fun LoginScreenContent(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Uri
-            )
+            ),
+            isError = siteError != null,
+            errorMessage = siteError
         )
         ChallengeTextField(
             label = "birthday",
@@ -285,5 +297,6 @@ private fun Prev() {
         onDeleteEmail = {}, onDeletePhone = {},
         onEmailPrimaryStateChanged = {_, _ -> Unit},
         onPhonePrimaryStateChanged = {_, _ -> Unit},
+        nameError = null, siteError = "not ok",
     )
 }

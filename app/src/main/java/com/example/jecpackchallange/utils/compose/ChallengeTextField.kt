@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -28,9 +29,13 @@ fun ChallengeTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    isError: Boolean = false,
+    errorMessage: String? = null
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (icon != null)
@@ -42,18 +47,29 @@ fun ChallengeTextField(
         else
             Box(modifier = Modifier.size(24.dp))
         Spacer(modifier = Modifier.size(8.dp))
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { Text(text = label) },
-            readOnly = readOnly,
-            enabled = enable,
-            modifier = modifier
-                .heightIn(48.dp),
-            trailingIcon = trailingIcon,
-            keyboardActions = keyboardActions,
-            keyboardOptions = keyboardOptions
-        )
+        Column {
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                label = { Text(text = label) },
+                readOnly = readOnly,
+                enabled = enable,
+                modifier = modifier
+                    .heightIn(48.dp),
+                trailingIcon = trailingIcon,
+                keyboardActions = keyboardActions,
+                keyboardOptions = keyboardOptions,
+                isError = isError,
+            )
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colors.error,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(start = 16.dp, top = 0.dp)
+                )
+            }
+        }
     }
 }
 

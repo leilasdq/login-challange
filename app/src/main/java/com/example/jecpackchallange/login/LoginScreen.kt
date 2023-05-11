@@ -53,6 +53,9 @@ fun LoginScreen(
         onDeleteEmail = {
             viewModel.onTriggerEvent(LoginEvent.OnEmailDeleted(it))
         },
+        onEmailPrimaryStateChanged = { index, value ->
+            viewModel.onTriggerEvent(LoginEvent.OnEmailPrimaryStateChanged(index, value))
+        },
         phoneList = uiState.phoneItemList,
         onPhoneChanged = { index, phone ->
             viewModel.onTriggerEvent(LoginEvent.OnPhoneChanged(index, phone))
@@ -63,6 +66,9 @@ fun LoginScreen(
         onAddPhone = { viewModel.onTriggerEvent(LoginEvent.OnAddPhone) },
         onDeletePhone = {
             viewModel.onTriggerEvent(LoginEvent.OnPhoneDeleted(it))
+        },
+        onPhonePrimaryStateChanged = { index, value ->
+            viewModel.onTriggerEvent(LoginEvent.OnPhonePrimaryStateChanged(index, value))
         },
         website = uiState.site,
         onWebsiteChanged = {
@@ -87,11 +93,13 @@ private fun LoginScreenContent(
     onEmailLabelChanged: (Int, String) -> Unit,
     onAddEmail: () -> Unit,
     onDeleteEmail: (Int) -> Unit,
+    onEmailPrimaryStateChanged: (Int, Boolean) -> Unit,
     phoneList: List<LoginItems>,
     onPhoneChanged: (Int, String) -> Unit,
     onPhoneLabelChanged: (Int, String) -> Unit,
     onAddPhone: () -> Unit,
     onDeletePhone: (Int) -> Unit,
+    onPhonePrimaryStateChanged: (Int, Boolean) -> Unit,
     website: String,
     onWebsiteChanged: (String) -> Unit,
     onRegisterClicked: () -> Unit,
@@ -179,12 +187,14 @@ private fun LoginScreenContent(
                 onItemLabelChanged = {
                     onEmailLabelChanged.invoke(index, it)
                 },
-                isPrimary = false,
+                isPrimary = loginItem.isPrimary,
                 onAddItem = onAddEmail,
                 onDeleteItem = {
                     onDeleteEmail(index)
                 },
-                onSelectAsPrimaryClicked = {},
+                onPrimaryStateChanged = {
+                    onEmailPrimaryStateChanged(index, it)
+                },
                 icon = Icons.Outlined.Email,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -205,12 +215,14 @@ private fun LoginScreenContent(
                 onItemLabelChanged = {
                     onPhoneLabelChanged.invoke(index, it)
                 },
-                isPrimary = false,
+                isPrimary = loginItem.isPrimary,
                 onAddItem = onAddPhone,
                 onDeleteItem = {
                     onDeletePhone(index)
                 },
-                onSelectAsPrimaryClicked = {},
+                onPrimaryStateChanged = {
+                    onPhonePrimaryStateChanged(index, it)
+                },
                 icon = Icons.Outlined.Phone,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -281,6 +293,8 @@ private fun Prev() {
         website = "test.com", onWebsiteChanged = {},
         onRegisterClicked = {},
         fullDate = "1390/9/1", onDateChanged = {},
-        onDeleteEmail = {}, onDeletePhone = {}
+        onDeleteEmail = {}, onDeletePhone = {},
+        onEmailPrimaryStateChanged = {_, _ -> Unit},
+        onPhonePrimaryStateChanged = {_, _ -> Unit},
     )
 }

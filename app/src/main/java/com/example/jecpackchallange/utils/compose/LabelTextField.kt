@@ -8,8 +8,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +29,7 @@ fun LabelTextField(
     isPrimary: Boolean,
     onAddItem: () -> Unit,
     onDeleteItem: () -> Unit,
-    onSelectAsPrimaryClicked: (Boolean) -> Unit,
+    onPrimaryStateChanged: (Boolean) -> Unit,
     icon: ImageVector? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     focusManager: FocusManager,
@@ -99,7 +97,7 @@ fun LabelTextField(
             }
             ChallengeCheckBox(
                 value = "primary",
-                onCheckBoxSelectionClicked = { onSelectAsPrimaryClicked.invoke(it) },
+                onCheckBoxSelectionClicked = { onPrimaryStateChanged.invoke(it) },
                 isSelected = isPrimary
             )
             Spacer(modifier = Modifier.size(8.dp))
@@ -123,7 +121,7 @@ private fun PrevForItems() {
     LabelTextField(
         label = "email", itemValue = "email@gmail", itemLabel = "work",
         onItemLabelChanged = {}, onItemValueChanged = {},
-        isPrimary = true, onSelectAsPrimaryClicked = {},
+        isPrimary = true, onPrimaryStateChanged = {},
         onAddItem = {}, onDeleteItem = {},
         focusManager = LocalFocusManager.current,
         showDeleteIcon = true

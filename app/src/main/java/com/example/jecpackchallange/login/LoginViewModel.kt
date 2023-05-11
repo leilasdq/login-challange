@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-class LoginViewModel(): ViewModel() {
+class LoginViewModel: ViewModel() {
 
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState
@@ -36,6 +36,15 @@ class LoginViewModel(): ViewModel() {
                 list.removeAt(eventType.index)
                 _loginState.update { it.copy(emailItemList = list.toList()) }
             }
+            is LoginEvent.OnEmailPrimaryStateChanged -> {
+                val list = _loginState.value.emailItemList.toMutableList()
+                list.forEach {
+                    it.isPrimary = false
+                }
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(item.value, item.label, eventType.newValue)
+                _loginState.update { it.copy(emailItemList = list) }
+            }
             is LoginEvent.OnPhoneChanged -> {
                 val list = _loginState.value.phoneItemList.toMutableList()
                 val item = list[eventType.index]
@@ -56,6 +65,15 @@ class LoginViewModel(): ViewModel() {
             is LoginEvent.OnPhoneDeleted -> {
                 val list = _loginState.value.phoneItemList.toMutableList()
                 list.removeAt(eventType.index)
+                _loginState.update { it.copy(phoneItemList = list.toList()) }
+            }
+            is LoginEvent.OnPhonePrimaryStateChanged -> {
+                val list = _loginState.value.phoneItemList.toMutableList()
+                list.forEach {
+                    it.isPrimary = false
+                }
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(item.value, item.label, eventType.newValue)
                 _loginState.update { it.copy(phoneItemList = list.toList()) }
             }
             is LoginEvent.OnWebsiteChanged -> {

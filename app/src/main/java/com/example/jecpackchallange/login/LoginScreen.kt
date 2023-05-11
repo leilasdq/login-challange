@@ -201,7 +201,7 @@ private fun LoginScreenContent(
                     keyboardType = KeyboardType.Email
                 ),
                 focusManager = focusManager,
-                showDeleteIcon = emailList.size > 1
+                showDeleteIcon = loginItem.isPrimary.not()
             )
         }
         phoneList.forEachIndexed { index, loginItem ->
@@ -229,7 +229,7 @@ private fun LoginScreenContent(
                     keyboardType = KeyboardType.Phone
                 ),
                 focusManager = focusManager,
-                showDeleteIcon = phoneList.size > 1
+                showDeleteIcon = loginItem.isPrimary.not()
             )
         }
         ChallengeTextField(
@@ -265,17 +265,6 @@ private fun LoginScreenContent(
                 )
             }
         )
-    }
-}
-
-private fun showDatePicker(
-    activity : AppCompatActivity,
-    updatedDate: (Long?) -> Unit)
-{
-    val picker = MaterialDatePicker.Builder.datePicker().build()
-    picker.show(activity.supportFragmentManager, picker.toString())
-    picker.addOnPositiveButtonClickListener {
-        updatedDate(it)
     }
 }
 

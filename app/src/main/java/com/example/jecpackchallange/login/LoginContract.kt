@@ -4,8 +4,8 @@ data class LoginState(
     val name: String = "",
     val site: String = "",
     val birthday: String = "",
-    val emailItemList: List<LoginItems> = listOf(LoginItems("", "", false)),
-    val phoneItemList: List<LoginItems> = listOf(LoginItems("", "", false)),
+    val emailItemList: List<LoginItems> = listOf(LoginItems("", "", true)),
+    val phoneItemList: List<LoginItems> = listOf(LoginItems("", "", true)),
 )
 
 sealed class LoginEvent {

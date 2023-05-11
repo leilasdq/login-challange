@@ -23,7 +23,8 @@ fun ChallengeTextField(
     icon: ImageVector? = null,
     readOnly: Boolean = false,
     enable: Boolean = true,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -45,7 +46,8 @@ fun ChallengeTextField(
             readOnly = readOnly,
             enabled = enable,
             modifier = modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            trailingIcon = trailingIcon
         )
     }
 }

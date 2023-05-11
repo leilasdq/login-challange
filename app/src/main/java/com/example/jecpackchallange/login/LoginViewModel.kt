@@ -47,7 +47,17 @@ class LoginViewModel(): ViewModel() {
             is LoginEvent.OnWebsiteChanged -> {
                 _loginState.update { it.copy(site = eventType.newValue) }
             }
+            is LoginEvent.OnBirthDateChanged -> {
+                _loginState.update { it.copy(birthday = eventType.newValue) }
+            }
+            is LoginEvent.OnRegisterClicked -> {
+                checkItems()
+            }
         }
+    }
+
+    private fun checkItems() {
+
     }
 
     private fun <T> updateLists(list: List<T>, index: Int, newValue: T): List<T> {

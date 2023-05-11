@@ -1,26 +1,17 @@
 package com.example.jecpackchallange.login
 
-import android.util.Log
-import android.widget.DatePicker
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.jecpackchallange.R
 import com.example.jecpackchallange.utils.compose.ChallengeTextField
 import com.example.jecpackchallange.utils.compose.LabelTextField
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -34,8 +25,45 @@ import java.time.format.DateTimeFormatter
 fun LoginScreen(
     viewModel: LoginViewModel
 ) {
-    val uiState = viewModel.loginState
+    val uiState by viewModel.loginState.collectAsState()
 
+    LoginScreenContent(
+        name = uiState.name,
+        onNameChanged = {
+            viewModel.onTriggerEvent(LoginEvent.OnNameChanged(it))
+        },
+        emailList = uiState.email,
+        emailLabelList = uiState.emailLabel,
+        onEmailChanged = { index, email ->
+            viewModel.onTriggerEvent(LoginEvent.OnEmailChanged(index, email))
+        },
+        onEmailLabelChanged = { index, label ->
+            viewModel.onTriggerEvent(LoginEvent.OnEmailLabelChanged(index, label))
+        },
+        onAddEmail = {
+            viewModel.onTriggerEvent(LoginEvent.OnAddEmail)
+        },
+        phoneList = uiState.phone,
+        phoneLabelList = uiState.phoneLabel,
+        onPhoneChanged = { index, phone ->
+            viewModel.onTriggerEvent(LoginEvent.OnPhoneChanged(index, phone))
+        },
+        onPhoneLabelChanged = { index, label ->
+            viewModel.onTriggerEvent(LoginEvent.OnPhoneLabelChanged(index, label))
+        },
+        onAddPhone = { viewModel.onTriggerEvent(LoginEvent.OnAddPhone) },
+        website = uiState.site,
+        onWebsiteChanged = {
+            viewModel.onTriggerEvent(LoginEvent.OnWebsiteChanged(it))
+        },
+        onRegisterClicked = {
+            viewModel.onTriggerEvent(LoginEvent.OnRegisterClicked)
+        },
+        fullDate = uiState.birthday,
+        onDateChanged = {
+            viewModel.onTriggerEvent(LoginEvent.OnBirthDateChanged(it))
+        }
+    )
 }
 
 @Composable
@@ -116,7 +144,9 @@ private fun LoginScreenContent(
             icon = Icons.Outlined.Person
         )
         LabelTextField(
-            label = "email", itemValue = emailList[0], itemLabel = emailLabelList[0],
+            label = "email",
+            itemValue = if (emailList.isEmpty().not()) emailList[0] else "",
+            itemLabel = if (emailLabelList.isEmpty().not()) emailLabelList[0] else "",
             onItemValueChanged = {
                 onEmailChanged(0, it)
             },
@@ -130,7 +160,9 @@ private fun LoginScreenContent(
             icon = Icons.Outlined.Email
         )
         LabelTextField(
-            label = "phone", itemValue = phoneList[0], itemLabel = phoneLabelList[0],
+            label = "phone",
+            itemValue = if (phoneList.isEmpty().not()) phoneList[0] else "",
+            itemLabel = if (phoneLabelList.isEmpty().not()) phoneLabelList[0] else "",
             onItemValueChanged = {
                 onPhoneChanged(0, it)
             },
@@ -158,7 +190,15 @@ private fun LoginScreenContent(
             modifier = Modifier.clickable {
                 dateDialogState.show()
             },
-            icon = Icons.Outlined.DateRange
+            icon = Icons.Outlined.DateRange,
+            trailingIcon = {
+                Icon(
+                    imageVector =
+                        if (dateDialogState.showing) Icons.Outlined.KeyboardArrowUp
+                        else Icons.Outlined.KeyboardArrowDown,
+                    contentDescription = null
+                )
+            }
         )
     }
 }

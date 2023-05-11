@@ -239,7 +239,8 @@ private fun LoginScreenContent(
                 focusManager = focusManager,
                 showDeleteIcon = loginItem.isPrimary.not(),
                 isError = loginItem.error != null,
-                errorMessage = loginItem.error
+                errorMessage = loginItem.error,
+                maxLength = 11
             )
         }
         ChallengeTextField(

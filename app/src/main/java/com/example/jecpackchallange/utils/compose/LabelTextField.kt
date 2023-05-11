@@ -35,7 +35,8 @@ fun LabelTextField(
     focusManager: FocusManager,
     showDeleteIcon: Boolean,
     isError: Boolean = false,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    maxLength: Int = Int.MAX_VALUE
 ) {
     Column(
         modifier = Modifier
@@ -62,7 +63,8 @@ fun LabelTextField(
                             )
                         }),
                     isError = isError,
-                    errorMessage = errorMessage
+                    errorMessage = errorMessage,
+                    maxLength = maxLength
                 )
             }
             Spacer(modifier = Modifier.size(8.dp))

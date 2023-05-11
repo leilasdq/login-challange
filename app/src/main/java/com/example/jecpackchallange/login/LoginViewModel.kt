@@ -130,7 +130,7 @@ class LoginViewModel @Inject constructor(): ViewModel() {
 
     private fun messageBaseOnPhoneValidation(phone: String): String? {
         return if (phone.isNullOrEmpty()) "can't be empty"
-        else if (phone.length < 11) "phone should have 11 char"
+        else if (phone.length < 11) "phone is 11 character!"
         else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) "phone format is not correct"
         else null
     }

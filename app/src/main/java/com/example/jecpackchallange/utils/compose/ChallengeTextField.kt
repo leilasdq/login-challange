@@ -30,7 +30,8 @@ fun ChallengeTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     isError: Boolean = false,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    maxLength: Int = Int.MAX_VALUE
 ) {
     Row(
         modifier = Modifier
@@ -50,7 +51,9 @@ fun ChallengeTextField(
         Column {
             OutlinedTextField(
                 value = value,
-                onValueChange = onValueChange,
+                onValueChange = {
+                    if (it.length <= maxLength) onValueChange(it)
+                },
                 label = { Text(text = label) },
                 readOnly = readOnly,
                 enabled = enable,
@@ -60,6 +63,7 @@ fun ChallengeTextField(
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions,
                 isError = isError,
+                maxLines = maxLength
             )
             if (errorMessage != null) {
                 Text(

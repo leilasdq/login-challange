@@ -3,9 +3,11 @@ package com.example.jecpackchallange.login
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -38,8 +40,7 @@ fun LoginScreen(
         onNameChanged = {
             viewModel.onTriggerEvent(LoginEvent.OnNameChanged(it))
         },
-        emailList = uiState.email,
-        emailLabelList = uiState.emailLabel,
+        emailList = uiState.emailItemList,
         onEmailChanged = { index, email ->
             viewModel.onTriggerEvent(LoginEvent.OnEmailChanged(index, email))
         },
@@ -49,8 +50,7 @@ fun LoginScreen(
         onAddEmail = {
             viewModel.onTriggerEvent(LoginEvent.OnAddEmail)
         },
-        phoneList = uiState.phone,
-        phoneLabelList = uiState.phoneLabel,
+        phoneList = uiState.phoneItemList,
         onPhoneChanged = { index, phone ->
             viewModel.onTriggerEvent(LoginEvent.OnPhoneChanged(index, phone))
         },
@@ -76,13 +76,11 @@ fun LoginScreen(
 private fun LoginScreenContent(
     name: String,
     onNameChanged: (String) -> Unit,
-    emailList: List<String>,
-    emailLabelList: List<String>,
+    emailList: List<LoginItems>,
     onEmailChanged: (Int, String) -> Unit,
     onEmailLabelChanged: (Int, String) -> Unit,
     onAddEmail: () -> Unit,
-    phoneList: List<String>,
-    phoneLabelList: List<String>,
+    phoneList: List<LoginItems>,
     onPhoneChanged: (Int, String) -> Unit,
     onPhoneLabelChanged: (Int, String) -> Unit,
     onAddPhone: () -> Unit,
@@ -126,7 +124,8 @@ private fun LoginScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(8.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.Start
     ) {
         Row(
@@ -161,50 +160,54 @@ private fun LoginScreenContent(
                 keyboardType = KeyboardType.Text
             ),
         )
-        LabelTextField(
-            label = "email",
-            itemValue = emailList[0],
-            itemLabel = emailLabelList[0],
-            onItemValueChanged = {
-                onEmailChanged(0, it)
-            },
-            onItemLabelChanged = {
-                onEmailLabelChanged.invoke(0, it)
-            },
-            isPrimary = false,
-            onAddItem = onAddEmail,
-            onDeleteItem = {},
-            onSelectAsPrimaryClicked = {},
-            icon = Icons.Outlined.Email,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Email
-            ),
-            focusManager = focusManager,
-            showDeleteIcon = emailList.size > 1
-        )
-        LabelTextField(
-            label = "phone",
-            itemValue = phoneList[0],
-            itemLabel = phoneLabelList[0],
-            onItemValueChanged = {
-                onPhoneChanged(0, it)
-            },
-            onItemLabelChanged = {
-                onPhoneLabelChanged.invoke(0, it)
-            },
-            isPrimary = false,
-            onAddItem = onAddPhone,
-            onDeleteItem = {},
-            onSelectAsPrimaryClicked = {},
-            icon = Icons.Outlined.Phone,
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Phone
-            ),
-            focusManager = focusManager,
-            showDeleteIcon = phoneList.size > 1
-        )
+        emailList.forEachIndexed { index, loginItem ->
+            LabelTextField(
+                label = "email",
+                itemValue = loginItem.value,
+                itemLabel = loginItem.label,
+                onItemValueChanged = {
+                    onEmailChanged(index, it)
+                },
+                onItemLabelChanged = {
+                    onEmailLabelChanged.invoke(index, it)
+                },
+                isPrimary = false,
+                onAddItem = onAddEmail,
+                onDeleteItem = {},
+                onSelectAsPrimaryClicked = {},
+                icon = Icons.Outlined.Email,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Email
+                ),
+                focusManager = focusManager,
+                showDeleteIcon = emailList.size > 1
+            )
+        }
+        phoneList.forEachIndexed { index, loginItem ->
+            LabelTextField(
+                label = "phone",
+                itemValue = loginItem.value,
+                itemLabel = loginItem.label,
+                onItemValueChanged = {
+                    onPhoneChanged(index, it)
+                },
+                onItemLabelChanged = {
+                    onPhoneLabelChanged.invoke(index, it)
+                },
+                isPrimary = false,
+                onAddItem = onAddPhone,
+                onDeleteItem = {},
+                onSelectAsPrimaryClicked = {},
+                icon = Icons.Outlined.Phone,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Phone
+                ),
+                focusManager = focusManager,
+                showDeleteIcon = phoneList.size > 1
+            )
+        }
         ChallengeTextField(
             label = "website",
             value = website,
@@ -257,10 +260,10 @@ private fun showDatePicker(
 private fun Prev() {
     LoginScreenContent(
         name = "Leila", onNameChanged = {},
-        emailList = listOf("test@gmail.com"), emailLabelList = listOf("test"),
+        emailList = listOf(LoginItems("test@gmail.com", "test", false)),
         onEmailChanged = { _, _ -> Unit }, onEmailLabelChanged = { _, _ -> Unit },
         onAddEmail = {},
-        phoneList = listOf("111"), phoneLabelList = listOf("test"),
+        phoneList = listOf(LoginItems("111", "testtt", true)),
         onPhoneChanged = { _, _ -> Unit }, onPhoneLabelChanged = { _, _ -> Unit },
         onAddPhone = {},
         website = "test.com", onWebsiteChanged = {},

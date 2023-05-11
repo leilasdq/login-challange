@@ -2,12 +2,10 @@ package com.example.jecpackchallange.login
 
 data class LoginState(
     val name: String = "",
-    val email: List<String> = listOf(""),
-    val emailLabel: List<String> = listOf(""),
-    val phone: List<String> = listOf(""),
-    val phoneLabel: List<String> = listOf(""),
     val site: String = "",
     val birthday: String = "",
+    val emailItemList: List<LoginItems> = listOf(LoginItems("", "", false)),
+    val phoneItemList: List<LoginItems> = listOf(LoginItems("", "", false)),
 )
 
 sealed class LoginEvent {
@@ -22,3 +20,9 @@ sealed class LoginEvent {
     data class OnBirthDateChanged(val newValue: String): LoginEvent()
     object OnRegisterClicked: LoginEvent()
 }
+
+data class LoginItems(
+    val value: String,
+    val label: String,
+    val isPrimary: Boolean
+)

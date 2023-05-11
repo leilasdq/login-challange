@@ -15,34 +15,38 @@ class LoginViewModel(): ViewModel() {
                 _loginState.update { it.copy(name = eventType.newValue) }
             }
             is LoginEvent.OnEmailChanged -> {
-                val emailList = updateLists(_loginState.value.email, eventType.index, eventType.newValue)
-                _loginState.update { it.copy(email = emailList.toList()) }
+                val list = _loginState.value.emailItemList.toMutableList()
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(eventType.newValue, item.label, item.isPrimary)
+                _loginState.update { it.copy(emailItemList = list.toList()) }
             }
             is LoginEvent.OnEmailLabelChanged -> {
-                val emailLabelList = updateLists(_loginState.value.emailLabel, eventType.index, eventType.newValue)
-                _loginState.update { it.copy(emailLabel = emailLabelList.toList()) }
+                val list = _loginState.value.emailItemList.toMutableList()
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(item.value, eventType.newValue, item.isPrimary)
+                _loginState.update { it.copy(emailItemList = list.toList()) }
             }
             is LoginEvent.OnAddEmail -> {
-                val emailList = _loginState.value.email.toMutableList()
-                val emailLabelList = _loginState.value.emailLabel.toMutableList()
-                emailList.add("")
-                emailLabelList.add("")
-                _loginState.update { it.copy(emailLabel = emailLabelList, email = emailList) }
+                val list = _loginState.value.emailItemList.toMutableList()
+                list.add(LoginItems("", "", false))
+                _loginState.update { it.copy(emailItemList = list.toList()) }
             }
             is LoginEvent.OnPhoneChanged -> {
-                val phoneList = updateLists(_loginState.value.phone, eventType.index, eventType.newValue)
-                _loginState.update { it.copy(phone = phoneList.toList()) }
+                val list = _loginState.value.phoneItemList.toMutableList()
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(eventType.newValue, item.label, item.isPrimary)
+                _loginState.update { it.copy(phoneItemList = list.toList()) }
             }
             is LoginEvent.OnPhoneLabelChanged -> {
-                val phoneLabelList = updateLists(_loginState.value.phoneLabel, eventType.index, eventType.newValue)
-                _loginState.update { it.copy(phoneLabel = phoneLabelList.toList()) }
+                val list = _loginState.value.phoneItemList.toMutableList()
+                val item = list[eventType.index]
+                list[eventType.index] = LoginItems(item.value, eventType.newValue, item.isPrimary)
+                _loginState.update { it.copy(phoneItemList = list.toList()) }
             }
             is LoginEvent.OnAddPhone -> {
-                val phoneList = _loginState.value.phone.toMutableList()
-                val phoneLabelList = _loginState.value.phoneLabel.toMutableList()
-                phoneList.add("")
-                phoneLabelList.add("")
-                _loginState.update { it.copy(phoneLabel = phoneLabelList, phone = phoneList) }
+                val list = _loginState.value.phoneItemList.toMutableList()
+                list.add(LoginItems("", "", false))
+                _loginState.update { it.copy(phoneItemList = list.toList()) }
             }
             is LoginEvent.OnWebsiteChanged -> {
                 _loginState.update { it.copy(site = eventType.newValue) }

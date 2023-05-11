@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,7 +20,7 @@ fun ChallengeTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    icon: Painter? = null
+    icon: ImageVector? = null
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -26,7 +28,7 @@ fun ChallengeTextField(
     ) {
         if (icon != null)
             Icon(
-                painter = icon,
+                imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )
@@ -56,6 +58,6 @@ private fun ChallengeTextFieldPrevWithIcon() {
     ChallengeTextField(
         "phone",
         "1234", {},
-        painterResource(id = R.drawable.ic_launcher_background)
+        Icons.Default.Add
     )
 }

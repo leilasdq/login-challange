@@ -18,66 +18,96 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
                 _registerState.update { it.copy(name = eventType.newValue) }
             }
             is RegisterEvent.OnEmailChanged -> {
-                val list = _registerState.value.emailItemList.toMutableList()
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(eventType.newValue, item.label, item.isPrimary)
-                _registerState.update { it.copy(emailItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        emailItemList = updateRegisterValueItem(
+                            _registerState.value.emailItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnEmailLabelChanged -> {
-                val list = _registerState.value.emailItemList.toMutableList()
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(item.value, eventType.newValue, item.isPrimary)
-                _registerState.update { it.copy(emailItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        emailItemList = updateRegisterLabelItem(
+                            _registerState.value.emailItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnAddEmail -> {
-                val list = _registerState.value.emailItemList.toMutableList()
-                list.add(RegisterItems("", "", false))
-                _registerState.update { it.copy(emailItemList = list.toList()) }
+                _registerState.update { it.copy(emailItemList = addItemToReturnedList(_registerState.value.emailItemList.toMutableList())) }
             }
             is RegisterEvent.OnEmailDeleted -> {
-                val list = _registerState.value.emailItemList.toMutableList()
-                list.removeAt(eventType.index)
-                _registerState.update { it.copy(emailItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        emailItemList = removeItemInReturnedList(
+                            _registerState.value.emailItemList.toMutableList(),
+                            eventType.index
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnEmailPrimaryStateChanged -> {
-                val list = _registerState.value.emailItemList.toMutableList()
-                list.forEach {
-                    it.isPrimary = false
+                _registerState.update {
+                    it.copy(
+                        emailItemList = updateRegisterPrimaryItem(
+                            _registerState.value.emailItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
                 }
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(item.value, item.label, eventType.newValue)
-                _registerState.update { it.copy(emailItemList = list) }
             }
             is RegisterEvent.OnPhoneChanged -> {
-                val list = _registerState.value.phoneItemList.toMutableList()
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(eventType.newValue, item.label, item.isPrimary)
-                _registerState.update { it.copy(phoneItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        phoneItemList = updateRegisterValueItem(
+                            _registerState.value.phoneItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnPhoneLabelChanged -> {
-                val list = _registerState.value.phoneItemList.toMutableList()
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(item.value, eventType.newValue, item.isPrimary)
-                _registerState.update { it.copy(phoneItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        phoneItemList = updateRegisterLabelItem(
+                            _registerState.value.phoneItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnAddPhone -> {
-                val list = _registerState.value.phoneItemList.toMutableList()
-                list.add(RegisterItems("", "", false))
-                _registerState.update { it.copy(phoneItemList = list.toList()) }
+                _registerState.update { it.copy(phoneItemList = addItemToReturnedList(_registerState.value.phoneItemList.toMutableList())) }
             }
             is RegisterEvent.OnPhoneDeleted -> {
-                val list = _registerState.value.phoneItemList.toMutableList()
-                list.removeAt(eventType.index)
-                _registerState.update { it.copy(phoneItemList = list.toList()) }
+                _registerState.update {
+                    it.copy(
+                        phoneItemList = removeItemInReturnedList(
+                            _registerState.value.phoneItemList.toMutableList(),
+                            eventType.index
+                        )
+                    )
+                }
             }
             is RegisterEvent.OnPhonePrimaryStateChanged -> {
-                val list = _registerState.value.phoneItemList.toMutableList()
-                list.forEach {
-                    it.isPrimary = false
+                _registerState.update {
+                    it.copy(
+                        phoneItemList = updateRegisterPrimaryItem(
+                            _registerState.value.phoneItemList.toMutableList(),
+                            eventType.index,
+                            eventType.newValue
+                        )
+                    )
                 }
-                val item = list[eventType.index]
-                list[eventType.index] = RegisterItems(item.value, item.label, eventType.newValue)
-                _registerState.update { it.copy(phoneItemList = list.toList()) }
             }
             is RegisterEvent.OnWebsiteChanged -> {
                 _registerState.update { it.copy(site = eventType.newValue) }
@@ -92,6 +122,38 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
                 _registerState.update { it.copy(success = false) }
             }
         }
+    }
+
+    private fun updateRegisterValueItem(list: MutableList<RegisterItems>, index: Int, value: String): List<RegisterItems> {
+        val item = list[index]
+        list[index] = RegisterItems(value, item.label, item.isPrimary)
+        return list
+    }
+
+    private fun updateRegisterLabelItem(list: MutableList<RegisterItems>, index: Int, value: String): List<RegisterItems> {
+        val item = list[index]
+        list[index] = RegisterItems(item.value, value, item.isPrimary)
+        return list
+    }
+
+    private fun updateRegisterPrimaryItem(list: MutableList<RegisterItems>, index: Int, value: Boolean): List<RegisterItems> {
+        list.forEach {
+            it.isPrimary = false
+        }
+        val item = list[index]
+        list[index] = RegisterItems(item.value, item.label, value)
+
+        return list
+    }
+
+    private fun addItemToReturnedList(list: MutableList<RegisterItems>): List<RegisterItems> {
+        list.add(RegisterItems("", "", false))
+        return list
+    }
+
+    private fun removeItemInReturnedList(list: MutableList<RegisterItems>, index: Int): List<RegisterItems> {
+        list.removeAt(index)
+        return list
     }
 
     private fun showSuccessIfNoErrorHappened() {
@@ -165,10 +227,4 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         else if (name.length < 5) "too short!"
         else null
     }
-
-    private fun <T> updateLists(list: List<T>, index: Int, newValue: T): List<T> {
-        return list.toMutableList().replace(list[index], newValue).toList()
-    }
-
-    private fun <E> Iterable<E>.replace(old: E, new: E) = map { if (it == old) new else it }
 }

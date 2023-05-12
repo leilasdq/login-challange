@@ -90,7 +90,7 @@ fun LoginScreen(
         },
         siteError = uiState.siteError,
         onRegisterClicked = {
-            viewModel.onTriggerEvent(RegisterEvent.OnRegisterClicked)
+            viewModel.onTriggerEvent(RegisterEvent.OnRegisterClicked(context))
         },
         fullDate = uiState.birthday,
         onDateChanged = {

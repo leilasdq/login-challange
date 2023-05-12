@@ -1,5 +1,7 @@
 package com.example.jecpackchallange.register
 
+import android.content.Context
+
 data class RegisterState(
     val name: String = "",
     val nameError: String? = null,
@@ -26,7 +28,7 @@ sealed class RegisterEvent {
     data class OnPhoneDeleted(val index: Int): RegisterEvent()
     data class OnWebsiteChanged(val newValue: String): RegisterEvent()
     data class OnBirthDateChanged(val newValue: String): RegisterEvent()
-    object OnRegisterClicked: RegisterEvent()
+    data class OnRegisterClicked(val context: Context): RegisterEvent()
     object ResetSuccessState: RegisterEvent()
 }
 

@@ -4,16 +4,13 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.jecpackchallange.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
-    @ApplicationContext val context: Context
-): ViewModel() {
+class RegisterViewModel @Inject constructor(): ViewModel() {
 
     companion object {
         private const val PHONE_MINIMUM_LENGTH = 11
@@ -129,7 +126,7 @@ class RegisterViewModel @Inject constructor(
                 _registerState.update { it.copy(birthday = eventType.newValue) }
             }
             is RegisterEvent.OnRegisterClicked -> {
-                showSuccessIfNoErrorHappened()
+                showSuccessIfNoErrorHappened(eventType.context)
             }
             is RegisterEvent.ResetSuccessState -> {
                 _registerState.update { it.copy(success = false) }
@@ -169,8 +166,8 @@ class RegisterViewModel @Inject constructor(
         return list
     }
 
-    private fun showSuccessIfNoErrorHappened() {
-        checkForErrors()
+    private fun showSuccessIfNoErrorHappened(context: Context) {
+        checkForErrors(context)
         if (hasItemsError().not()) {
             _registerState.update {
                 it.copy(success = true)
@@ -192,7 +189,7 @@ class RegisterViewModel @Inject constructor(
     }
 
 
-    private fun checkForErrors() {
+    private fun checkForErrors(context: Context) {
         val emailList = registerState.value.emailItemList.toMutableList()
         val phoneList = registerState.value.phoneItemList.toMutableList()
         val name = registerState.value.name
@@ -200,12 +197,12 @@ class RegisterViewModel @Inject constructor(
         val birthday = registerState.value.birthday
 
         emailList.forEachIndexed { index, items ->
-            val msg = messageBaseOnEmailValidation(items.value)
+            val msg = messageBaseOnEmailValidation(items.value, context)
             if (msg != null)
                 emailList[index] = RegisterItems(items.value, items.label, items.isPrimary, msg)
         }
         phoneList.forEachIndexed { index, items ->
-            val msg = messageBaseOnPhoneValidation(items.value)
+            val msg = messageBaseOnPhoneValidation(items.value, context)
             if (msg != null)
                 phoneList[index] = RegisterItems(items.value, items.label, items.isPrimary, msg)
         }
@@ -213,38 +210,38 @@ class RegisterViewModel @Inject constructor(
         _registerState.update { it.copy(
             emailItemList = emailList,
             phoneItemList = phoneList,
-            nameError = messageBaseOnNameValidation(name),
-            siteError = messageBaseOnWebsiteValidation(site),
-            birthdayError = messageBaseBirthdayValidation(birthday)
+            nameError = messageBaseOnNameValidation(name, context),
+            siteError = messageBaseOnWebsiteValidation(site, context),
+            birthdayError = messageBaseBirthdayValidation(birthday, context)
         ) }
     }
 
-    private fun messageBaseOnEmailValidation(email: String): String? {
+    private fun messageBaseOnEmailValidation(email: String, context: Context): String? {
         return if (email.isNullOrEmpty()) context.getString(R.string.error_empty_item)
         else if (android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches().not()) context.getString(R.string.error_not_in_format, "email")
         else null
     }
 
-    private fun messageBaseOnWebsiteValidation(site: String): String? {
+    private fun messageBaseOnWebsiteValidation(site: String, context: Context): String? {
         return if (site.isNullOrEmpty()) context.getString(R.string.error_empty_item)
         else if (android.util.Patterns.WEB_URL.matcher(site.trim()).matches().not()) context.getString(R.string.error_not_in_format, "url link")
         else null
     }
 
-    private fun messageBaseOnPhoneValidation(phone: String): String? {
+    private fun messageBaseOnPhoneValidation(phone: String, context: Context): String? {
         return if (phone.isNullOrEmpty()) context.getString(R.string.error_empty_item)
         else if (phone.length < PHONE_MINIMUM_LENGTH) context.getString(R.string.error_phone_short)
         else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) context.getString(R.string.error_not_in_format, "phone")
         else null
     }
 
-    private fun messageBaseOnNameValidation(name: String): String? {
+    private fun messageBaseOnNameValidation(name: String, context: Context): String? {
         return if (name.isNullOrEmpty()) context.getString(R.string.error_empty_item)
         else if (name.length < NAME_MINIMUM_LENGTH) context.getString(R.string.error_short)
         else null
     }
 
-    private fun messageBaseBirthdayValidation(birthday: String): String? {
+    private fun messageBaseBirthdayValidation(birthday: String, context: Context): String? {
         val splittedDate = birthday.split(' ')
         return if (birthday.isNullOrEmpty()) context.getString(R.string.error_empty_item)
         else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - SMALLEST_YEAR) context.getString(R.string.error_birthdate_short)

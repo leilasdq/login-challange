@@ -163,8 +163,7 @@ private fun LoginScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(8.dp),
         horizontalAlignment = Alignment.Start
     ) {
         Row(
@@ -183,122 +182,129 @@ private fun LoginScreenContent(
             }
         }
         Spacer(modifier = Modifier.size(8.dp))
-        ChallengeTextField(
-            label = stringResource(id = R.string.name),
-            value = name,
-            onValueChange = { onNameChanged(it) },
-            icon = Icons.Outlined.Person,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(
-                        FocusDirection.Down
-                    )
-                }),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Text
-            ),
-            isError = nameError != null,
-            errorMessage = nameError
-        )
-        emailList.forEachIndexed { index, loginItem ->
-            LabelTextField(
-                label = stringResource(id = R.string.email),
-                itemValue = loginItem.value,
-                itemLabel = loginItem.label,
-                onItemValueChanged = {
-                    onEmailChanged(index, it)
-                },
-                onItemLabelChanged = {
-                    onEmailLabelChanged.invoke(index, it)
-                },
-                isPrimary = loginItem.isPrimary,
-                onAddItem = onAddEmail,
-                onDeleteItem = {
-                    onDeleteEmail(index)
-                },
-                onPrimaryStateChanged = {
-                    onEmailPrimaryStateChanged(index, it)
-                },
-                icon = Icons.Outlined.Email,
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+
+            ChallengeTextField(
+                label = stringResource(id = R.string.name),
+                value = name,
+                onValueChange = { onNameChanged(it) },
+                icon = Icons.Outlined.Person,
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        focusManager.moveFocus(
+                            FocusDirection.Down
+                        )
+                    }),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Text
                 ),
-                focusManager = focusManager,
-                showDeleteIcon = loginItem.isPrimary.not(),
-                isError = loginItem.error != null,
-                errorMessage = loginItem.error
+                isError = nameError != null,
+                errorMessage = nameError
             )
-        }
-        phoneList.forEachIndexed { index, loginItem ->
-            LabelTextField(
-                label = stringResource(id = R.string.phone),
-                itemValue = loginItem.value,
-                itemLabel = loginItem.label,
-                onItemValueChanged = {
-                    onPhoneChanged(index, it)
-                },
-                onItemLabelChanged = {
-                    onPhoneLabelChanged.invoke(index, it)
-                },
-                isPrimary = loginItem.isPrimary,
-                onAddItem = onAddPhone,
-                onDeleteItem = {
-                    onDeletePhone(index)
-                },
-                onPrimaryStateChanged = {
-                    onPhonePrimaryStateChanged(index, it)
-                },
-                icon = Icons.Outlined.Phone,
+            emailList.forEachIndexed { index, loginItem ->
+                LabelTextField(
+                    label = stringResource(id = R.string.email),
+                    itemValue = loginItem.value,
+                    itemLabel = loginItem.label,
+                    onItemValueChanged = {
+                        onEmailChanged(index, it)
+                    },
+                    onItemLabelChanged = {
+                        onEmailLabelChanged.invoke(index, it)
+                    },
+                    isPrimary = loginItem.isPrimary,
+                    onAddItem = onAddEmail,
+                    onDeleteItem = {
+                        onDeleteEmail(index)
+                    },
+                    onPrimaryStateChanged = {
+                        onEmailPrimaryStateChanged(index, it)
+                    },
+                    icon = Icons.Outlined.Email,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Email
+                    ),
+                    focusManager = focusManager,
+                    showDeleteIcon = loginItem.isPrimary.not(),
+                    isError = loginItem.error != null,
+                    errorMessage = loginItem.error
+                )
+            }
+            phoneList.forEachIndexed { index, loginItem ->
+                LabelTextField(
+                    label = stringResource(id = R.string.phone),
+                    itemValue = loginItem.value,
+                    itemLabel = loginItem.label,
+                    onItemValueChanged = {
+                        onPhoneChanged(index, it)
+                    },
+                    onItemLabelChanged = {
+                        onPhoneLabelChanged.invoke(index, it)
+                    },
+                    isPrimary = loginItem.isPrimary,
+                    onAddItem = onAddPhone,
+                    onDeleteItem = {
+                        onDeletePhone(index)
+                    },
+                    onPrimaryStateChanged = {
+                        onPhonePrimaryStateChanged(index, it)
+                    },
+                    icon = Icons.Outlined.Phone,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next,
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    focusManager = focusManager,
+                    showDeleteIcon = loginItem.isPrimary.not(),
+                    isError = loginItem.error != null,
+                    errorMessage = loginItem.error,
+                    maxLength = 11
+                )
+            }
+            ChallengeTextField(
+                label = stringResource(id = R.string.website),
+                value = website,
+                onValueChange = { onWebsiteChanged(it) },
+                icon = Icons.Outlined.Link,
+                keyboardActions = KeyboardActions(
+                    onNext = {
+                        focusManager.clearFocus()
+                    }),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Phone
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Uri
                 ),
-                focusManager = focusManager,
-                showDeleteIcon = loginItem.isPrimary.not(),
-                isError = loginItem.error != null,
-                errorMessage = loginItem.error,
-                maxLength = 11
+                isError = siteError != null,
+                errorMessage = siteError
             )
-        }
-        ChallengeTextField(
-            label = stringResource(id = R.string.website),
-            value = website,
-            onValueChange = {onWebsiteChanged(it) },
-            icon = Icons.Outlined.Link,
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.clearFocus()
-                }),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Uri
-            ),
-            isError = siteError != null,
-            errorMessage = siteError
-        )
-        ChallengeTextField(
-            label = stringResource(id = R.string.birthday),
-            value = fullDate,
-            onValueChange = { },
-            readOnly = true,
-            enable = false,
-            modifier = Modifier.clickable {
-                dateDialogState.show()
-            },
-            icon = Icons.Outlined.DateRange,
-            trailingIcon = {
-                Icon(
-                    imageVector =
+            ChallengeTextField(
+                label = stringResource(id = R.string.birthday),
+                value = fullDate,
+                onValueChange = { },
+                readOnly = true,
+                enable = false,
+                modifier = Modifier.clickable {
+                    dateDialogState.show()
+                },
+                icon = Icons.Outlined.DateRange,
+                trailingIcon = {
+                    Icon(
+                        imageVector =
                         if (dateDialogState.showing) Icons.Outlined.KeyboardArrowUp
                         else Icons.Outlined.KeyboardArrowDown,
-                    contentDescription = null
-                )
-            },
-            isError = birthdayError != null,
-            errorMessage = birthdayError
-        )
+                        contentDescription = null
+                    )
+                },
+                isError = birthdayError != null,
+                errorMessage = birthdayError
+            )
+        }
     }
 }
 
@@ -317,8 +323,8 @@ private fun Prev() {
         onRegisterClicked = {},
         fullDate = "1390/9/1", onDateChanged = {},
         onDeleteEmail = {}, onDeletePhone = {},
-        onEmailPrimaryStateChanged = {_, _ -> Unit},
-        onPhonePrimaryStateChanged = {_, _ -> Unit},
+        onEmailPrimaryStateChanged = { _, _ -> Unit },
+        onPhonePrimaryStateChanged = { _, _ -> Unit },
         nameError = null, siteError = "not ok",
         birthdayError = "hmmm"
     )

@@ -15,6 +15,13 @@ class RegisterViewModel @Inject constructor(
     @ApplicationContext val context: Context
 ): ViewModel() {
 
+    companion object {
+        private const val PHONE_MINIMUM_LENGTH = 11
+        private const val NAME_MINIMUM_LENGTH = 5
+        private const val SMALLEST_YEAR = 5
+        private const val MINIMUM_YEAR = 5
+    }
+
     private val _registerState = MutableStateFlow(RegisterState())
     val registerState = _registerState
 
@@ -226,22 +233,22 @@ class RegisterViewModel @Inject constructor(
 
     private fun messageBaseOnPhoneValidation(phone: String): String? {
         return if (phone.isNullOrEmpty()) context.getString(R.string.error_empty_item)
-        else if (phone.length < 11) context.getString(R.string.error_phone_short)
+        else if (phone.length < PHONE_MINIMUM_LENGTH) context.getString(R.string.error_phone_short)
         else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) context.getString(R.string.error_not_in_format, "phone")
         else null
     }
 
     private fun messageBaseOnNameValidation(name: String): String? {
         return if (name.isNullOrEmpty()) context.getString(R.string.error_empty_item)
-        else if (name.length < 5) context.getString(R.string.error_short)
+        else if (name.length < NAME_MINIMUM_LENGTH) context.getString(R.string.error_short)
         else null
     }
 
     private fun messageBaseBirthdayValidation(birthday: String): String? {
         val splittedDate = birthday.split(' ')
         return if (birthday.isNullOrEmpty()) context.getString(R.string.error_empty_item)
-        else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - 3) context.getString(R.string.error_birthdate_short)
-        else if (splittedDate.last().toInt() >= Calendar.getInstance().get(Calendar.YEAR) - 15) context.getString(R.string.error_minimum_birthdate)
+        else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - SMALLEST_YEAR) context.getString(R.string.error_birthdate_short)
+        else if (splittedDate.last().toInt() >= Calendar.getInstance().get(Calendar.YEAR) - MINIMUM_YEAR) context.getString(R.string.error_minimum_birthdate)
         else null
     }
 }

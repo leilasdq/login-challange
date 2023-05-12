@@ -17,10 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jecpackchallange.R
 import com.example.jecpackchallange.utils.compose.ChallengeTextField
 import com.example.jecpackchallange.utils.compose.LabelTextField
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -35,11 +37,12 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.registerState.collectAsState()
     val context = LocalContext.current
+    val successfulMsg = stringResource(id = R.string.registered_successfully)
 
     if (uiState.success) {
         LaunchedEffect(key1 = viewModel) {
             Toast
-                .makeText(context, "You have been registered successfully!", Toast.LENGTH_SHORT)
+                .makeText(context, successfulMsg, Toast.LENGTH_SHORT)
                 .show()
             viewModel.onTriggerEvent(RegisterEvent.ResetSuccessState)
         }
@@ -139,15 +142,15 @@ private fun LoginScreenContent(
     MaterialDialog(
         dialogState = dateDialogState,
         buttons = {
-            positiveButton(text = "Ok") {
+            positiveButton(text = stringResource(id = android.R.string.ok)) {
                 onDateChanged(formattedDate)
             }
-            negativeButton(text = "Cancel")
+            negativeButton(text = stringResource(id = android.R.string.cancel))
         }
     ) {
         datepicker(
             initialDate = LocalDate.now(),
-            title = "Pick a date",
+            title = stringResource(id = R.string.pick_date),
             allowedDateValidator = {
                 it <= LocalDate.now()
                 it.year <= LocalDate.now().year
@@ -169,19 +172,19 @@ private fun LoginScreenContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Register",
+                text = stringResource(id = R.string.register),
                 style = MaterialTheme.typography.h4
             )
             Button(
                 shape = RoundedCornerShape(50),
                 onClick = { onRegisterClicked() },
             ) {
-                Text(text = "Submit")
+                Text(text = stringResource(id = R.string.submit))
             }
         }
         Spacer(modifier = Modifier.size(8.dp))
         ChallengeTextField(
-            label = "name",
+            label = stringResource(id = R.string.name),
             value = name,
             onValueChange = { onNameChanged(it) },
             icon = Icons.Outlined.Person,
@@ -200,7 +203,7 @@ private fun LoginScreenContent(
         )
         emailList.forEachIndexed { index, loginItem ->
             LabelTextField(
-                label = "email",
+                label = stringResource(id = R.string.email),
                 itemValue = loginItem.value,
                 itemLabel = loginItem.label,
                 onItemValueChanged = {
@@ -230,7 +233,7 @@ private fun LoginScreenContent(
         }
         phoneList.forEachIndexed { index, loginItem ->
             LabelTextField(
-                label = "phone",
+                label = stringResource(id = R.string.phone),
                 itemValue = loginItem.value,
                 itemLabel = loginItem.label,
                 onItemValueChanged = {
@@ -260,7 +263,7 @@ private fun LoginScreenContent(
             )
         }
         ChallengeTextField(
-            label = "website",
+            label = stringResource(id = R.string.website),
             value = website,
             onValueChange = {onWebsiteChanged(it) },
             icon = Icons.Outlined.Link,
@@ -276,7 +279,7 @@ private fun LoginScreenContent(
             errorMessage = siteError
         )
         ChallengeTextField(
-            label = "birthday",
+            label = stringResource(id = R.string.birthday),
             value = fullDate,
             onValueChange = { },
             readOnly = true,

@@ -1,14 +1,19 @@
 package com.example.jecpackchallange.register
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.example.jecpackchallange.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(): ViewModel() {
+class RegisterViewModel @Inject constructor(
+    @ApplicationContext val context: Context
+): ViewModel() {
 
     private val _registerState = MutableStateFlow(RegisterState())
     val registerState = _registerState
@@ -208,35 +213,35 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
     }
 
     private fun messageBaseOnEmailValidation(email: String): String? {
-        return if (email.isNullOrEmpty()) "can't be empty"
-        else if (android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches().not()) "email format is not correct"
+        return if (email.isNullOrEmpty()) context.getString(R.string.error_empty_item)
+        else if (android.util.Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches().not()) context.getString(R.string.error_not_in_format, "email")
         else null
     }
 
     private fun messageBaseOnWebsiteValidation(site: String): String? {
-        return if (site.isNullOrEmpty()) "can't be empty"
-        else if (android.util.Patterns.WEB_URL.matcher(site.trim()).matches().not()) "url link format is not correct"
+        return if (site.isNullOrEmpty()) context.getString(R.string.error_empty_item)
+        else if (android.util.Patterns.WEB_URL.matcher(site.trim()).matches().not()) context.getString(R.string.error_not_in_format, "url link")
         else null
     }
 
     private fun messageBaseOnPhoneValidation(phone: String): String? {
-        return if (phone.isNullOrEmpty()) "can't be empty"
-        else if (phone.length < 11) "phone is 11 character!"
-        else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) "phone format is not correct"
+        return if (phone.isNullOrEmpty()) context.getString(R.string.error_empty_item)
+        else if (phone.length < 11) context.getString(R.string.error_phone_short)
+        else if (android.util.Patterns.PHONE.matcher(phone.trim()).matches().not()) context.getString(R.string.error_not_in_format, "phone")
         else null
     }
 
     private fun messageBaseOnNameValidation(name: String): String? {
-        return if (name.isNullOrEmpty()) "can't be empty"
-        else if (name.length < 5) "too short!"
+        return if (name.isNullOrEmpty()) context.getString(R.string.error_empty_item)
+        else if (name.length < 5) context.getString(R.string.error_short)
         else null
     }
 
     private fun messageBaseBirthdayValidation(birthday: String): String? {
         val splittedDate = birthday.split(' ')
-        return if (birthday.isNullOrEmpty()) "can't be empty"
-        else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - 3) "You are less than 3 year??!"
-        else if (splittedDate.last().toInt() >= Calendar.getInstance().get(Calendar.YEAR) - 15) "You should be at least 15 years old"
+        return if (birthday.isNullOrEmpty()) context.getString(R.string.error_empty_item)
+        else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - 3) context.getString(R.string.error_birthdate_short)
+        else if (splittedDate.last().toInt() >= Calendar.getInstance().get(Calendar.YEAR) - 15) context.getString(R.string.error_minimum_birthdate)
         else null
     }
 }

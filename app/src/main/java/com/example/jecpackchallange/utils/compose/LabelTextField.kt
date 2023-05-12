@@ -15,9 +15,11 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jecpackchallange.R
 
 @Composable
 fun LabelTextField(
@@ -85,7 +87,7 @@ fun LabelTextField(
         ) {
             Box(modifier = Modifier.weight(1f)) {
                 ChallengeTextField(
-                    label = "label",
+                    label = stringResource(id = R.string.label),
                     value = itemLabel,
                     onValueChange = {
                         onItemLabelChanged.invoke(it)
@@ -102,7 +104,7 @@ fun LabelTextField(
                 )
             }
             ChallengeCheckBox(
-                value = "primary",
+                value = stringResource(id = R.string.primary),
                 onCheckBoxSelectionClicked = { onPrimaryStateChanged.invoke(it) },
                 isSelected = isPrimary
             )

@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">jecpack challange</string>
+    <string name="app_name">Jecpack challange</string>
+
+    <string name="error_empty_item">can\'t be empty</string>
+    <string name="error_not_in_format">%s format is not correct</string>
+    <string name="error_short">too short!</string>
+    <string name="error_phone_short">must have 11 character!</string>
+    <string name="error_birthdate_short">You are less than 3 year??!</string>
+    <string name="error_minimum_birthdate">You should be at least 15 years old</string>
+
+    <string name="pick_date">Pick a date</string>
+
+    <string name="registered_successfully">You have been registered successfully!</string>
+    <string name="register">Register</string>
+    <string name="submit">Submit</string>
+    <string name="name">name</string>
+    <string name="email">email</string>
+    <string name="phone">phone</string>
+    <string name="website">website</string>
+    <string name="birthday">birthday</string>
+    <string name="label">label</string>
+    <string name="primary">primary</string>
 </resources>

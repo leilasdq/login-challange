@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.Scaffold
 import com.example.jecpackchallange.register.LoginScreen
 import com.example.jecpackchallange.register.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,10 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<RegisterViewModel>()
 
         setContent {
-            LoginScreen(viewModel = viewModel)
+            Scaffold {
+                LoginScreen(viewModel = viewModel)
+            }
+
         }
 
     }

@@ -8,6 +8,7 @@ data class RegisterState(
     val birthday: String = "",
     val emailItemList: List<RegisterItems> = listOf(RegisterItems("", "", true)),
     val phoneItemList: List<RegisterItems> = listOf(RegisterItems("", "", true)),
+    val success: Boolean = false
 )
 
 sealed class RegisterEvent {
@@ -25,6 +26,7 @@ sealed class RegisterEvent {
     data class OnWebsiteChanged(val newValue: String): RegisterEvent()
     data class OnBirthDateChanged(val newValue: String): RegisterEvent()
     object OnRegisterClicked: RegisterEvent()
+    object ResetSuccessState: RegisterEvent()
 }
 
 data class RegisterItems(

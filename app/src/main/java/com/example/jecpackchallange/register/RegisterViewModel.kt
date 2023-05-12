@@ -86,12 +86,37 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
                 _registerState.update { it.copy(birthday = eventType.newValue) }
             }
             is RegisterEvent.OnRegisterClicked -> {
-                checkItems()
+                showSuccessIfNoErrorHappened()
+            }
+            is RegisterEvent.ResetSuccessState -> {
+                _registerState.update { it.copy(success = false) }
             }
         }
     }
 
-    private fun checkItems() {
+    private fun showSuccessIfNoErrorHappened() {
+        checkForErrors()
+        if (hasItemsError().not()) {
+            _registerState.update {
+                it.copy(success = true)
+            }
+        }
+    }
+
+    private fun hasItemsError(): Boolean {
+        val emailList = registerState.value.emailItemList.toMutableList()
+        val phoneList = registerState.value.phoneItemList.toMutableList()
+        val nameError = registerState.value.nameError
+        val siteError = registerState.value.siteError
+
+        return if (nameError != null || siteError != null) {
+            true
+        }
+        else (emailList.any { it.error != null } || phoneList.any { it.error != null })
+    }
+
+
+    private fun checkForErrors() {
         val emailList = registerState.value.emailItemList.toMutableList()
         val phoneList = registerState.value.phoneItemList.toMutableList()
         val name = registerState.value.name

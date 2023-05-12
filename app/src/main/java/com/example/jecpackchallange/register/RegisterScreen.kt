@@ -1,6 +1,5 @@
-package com.example.jecpackchallange.login
+package com.example.jecpackchallange.register
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jecpackchallange.utils.compose.ChallengeTextField
 import com.example.jecpackchallange.utils.compose.LabelTextField
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
@@ -31,57 +29,57 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel
+    viewModel: RegisterViewModel
 ) {
-    val uiState by viewModel.loginState.collectAsState()
+    val uiState by viewModel.registerState.collectAsState()
 
     LoginScreenContent(
         name = uiState.name,
         onNameChanged = {
-            viewModel.onTriggerEvent(LoginEvent.OnNameChanged(it))
+            viewModel.onTriggerEvent(RegisterEvent.OnNameChanged(it))
         },
         nameError = uiState.nameError,
         emailList = uiState.emailItemList,
         onEmailChanged = { index, email ->
-            viewModel.onTriggerEvent(LoginEvent.OnEmailChanged(index, email))
+            viewModel.onTriggerEvent(RegisterEvent.OnEmailChanged(index, email))
         },
         onEmailLabelChanged = { index, label ->
-            viewModel.onTriggerEvent(LoginEvent.OnEmailLabelChanged(index, label))
+            viewModel.onTriggerEvent(RegisterEvent.OnEmailLabelChanged(index, label))
         },
         onAddEmail = {
-            viewModel.onTriggerEvent(LoginEvent.OnAddEmail)
+            viewModel.onTriggerEvent(RegisterEvent.OnAddEmail)
         },
         onDeleteEmail = {
-            viewModel.onTriggerEvent(LoginEvent.OnEmailDeleted(it))
+            viewModel.onTriggerEvent(RegisterEvent.OnEmailDeleted(it))
         },
         onEmailPrimaryStateChanged = { index, value ->
-            viewModel.onTriggerEvent(LoginEvent.OnEmailPrimaryStateChanged(index, value))
+            viewModel.onTriggerEvent(RegisterEvent.OnEmailPrimaryStateChanged(index, value))
         },
         phoneList = uiState.phoneItemList,
         onPhoneChanged = { index, phone ->
-            viewModel.onTriggerEvent(LoginEvent.OnPhoneChanged(index, phone))
+            viewModel.onTriggerEvent(RegisterEvent.OnPhoneChanged(index, phone))
         },
         onPhoneLabelChanged = { index, label ->
-            viewModel.onTriggerEvent(LoginEvent.OnPhoneLabelChanged(index, label))
+            viewModel.onTriggerEvent(RegisterEvent.OnPhoneLabelChanged(index, label))
         },
-        onAddPhone = { viewModel.onTriggerEvent(LoginEvent.OnAddPhone) },
+        onAddPhone = { viewModel.onTriggerEvent(RegisterEvent.OnAddPhone) },
         onDeletePhone = {
-            viewModel.onTriggerEvent(LoginEvent.OnPhoneDeleted(it))
+            viewModel.onTriggerEvent(RegisterEvent.OnPhoneDeleted(it))
         },
         onPhonePrimaryStateChanged = { index, value ->
-            viewModel.onTriggerEvent(LoginEvent.OnPhonePrimaryStateChanged(index, value))
+            viewModel.onTriggerEvent(RegisterEvent.OnPhonePrimaryStateChanged(index, value))
         },
         website = uiState.site,
         onWebsiteChanged = {
-            viewModel.onTriggerEvent(LoginEvent.OnWebsiteChanged(it))
+            viewModel.onTriggerEvent(RegisterEvent.OnWebsiteChanged(it))
         },
         siteError = uiState.siteError,
         onRegisterClicked = {
-            viewModel.onTriggerEvent(LoginEvent.OnRegisterClicked)
+            viewModel.onTriggerEvent(RegisterEvent.OnRegisterClicked)
         },
         fullDate = uiState.birthday,
         onDateChanged = {
-            viewModel.onTriggerEvent(LoginEvent.OnBirthDateChanged(it))
+            viewModel.onTriggerEvent(RegisterEvent.OnBirthDateChanged(it))
         }
     )
 }
@@ -91,13 +89,13 @@ private fun LoginScreenContent(
     name: String,
     onNameChanged: (String) -> Unit,
     nameError: String?,
-    emailList: List<LoginItems>,
+    emailList: List<RegisterItems>,
     onEmailChanged: (Int, String) -> Unit,
     onEmailLabelChanged: (Int, String) -> Unit,
     onAddEmail: () -> Unit,
     onDeleteEmail: (Int) -> Unit,
     onEmailPrimaryStateChanged: (Int, Boolean) -> Unit,
-    phoneList: List<LoginItems>,
+    phoneList: List<RegisterItems>,
     onPhoneChanged: (Int, String) -> Unit,
     onPhoneLabelChanged: (Int, String) -> Unit,
     onAddPhone: () -> Unit,
@@ -286,10 +284,10 @@ private fun LoginScreenContent(
 private fun Prev() {
     LoginScreenContent(
         name = "Leila", onNameChanged = {},
-        emailList = listOf(LoginItems("test@gmail.com", "test", false)),
+        emailList = listOf(RegisterItems("test@gmail.com", "test", false)),
         onEmailChanged = { _, _ -> Unit }, onEmailLabelChanged = { _, _ -> Unit },
         onAddEmail = {},
-        phoneList = listOf(LoginItems("111", "testtt", true)),
+        phoneList = listOf(RegisterItems("111", "testtt", true)),
         onPhoneChanged = { _, _ -> Unit }, onPhoneLabelChanged = { _, _ -> Unit },
         onAddPhone = {},
         website = "test.com", onWebsiteChanged = {},

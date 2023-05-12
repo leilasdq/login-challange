@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -170,8 +171,9 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         val phoneList = registerState.value.phoneItemList.toMutableList()
         val nameError = registerState.value.nameError
         val siteError = registerState.value.siteError
+        val birthdayError = registerState.value.birthdayError
 
-        return if (nameError != null || siteError != null) {
+        return if (nameError != null || siteError != null || birthdayError != null) {
             true
         }
         else (emailList.any { it.error != null } || phoneList.any { it.error != null })
@@ -183,6 +185,7 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         val phoneList = registerState.value.phoneItemList.toMutableList()
         val name = registerState.value.name
         val site = registerState.value.site
+        val birthday = registerState.value.birthday
 
         emailList.forEachIndexed { index, items ->
             val msg = messageBaseOnEmailValidation(items.value)
@@ -200,6 +203,7 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
             phoneItemList = phoneList,
             nameError = messageBaseOnNameValidation(name),
             siteError = messageBaseOnWebsiteValidation(site),
+            birthdayError = messageBaseBirthdayValidation(birthday)
         ) }
     }
 
@@ -225,6 +229,14 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
     private fun messageBaseOnNameValidation(name: String): String? {
         return if (name.isNullOrEmpty()) "can't be empty"
         else if (name.length < 5) "too short!"
+        else null
+    }
+
+    private fun messageBaseBirthdayValidation(birthday: String): String? {
+        val splittedDate = birthday.split(' ')
+        return if (birthday.isNullOrEmpty()) "can't be empty"
+        else if (splittedDate.last().toInt() > Calendar.getInstance().get(Calendar.YEAR) - 3) "You are less than 3 year??!"
+        else if (splittedDate.last().toInt() >= Calendar.getInstance().get(Calendar.YEAR) - 15) "You should be at least 15 years old"
         else null
     }
 }

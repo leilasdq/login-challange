@@ -6,6 +6,7 @@ data class RegisterState(
     val site: String = "",
     val siteError: String? = null,
     val birthday: String = "",
+    val birthdayError: String? = null,
     val emailItemList: List<RegisterItems> = listOf(RegisterItems("", "", true)),
     val phoneItemList: List<RegisterItems> = listOf(RegisterItems("", "", true)),
     val success: Boolean = false

@@ -92,7 +92,8 @@ fun LoginScreen(
         fullDate = uiState.birthday,
         onDateChanged = {
             viewModel.onTriggerEvent(RegisterEvent.OnBirthDateChanged(it))
-        }
+        },
+        birthdayError = uiState.birthdayError
     )
 }
 
@@ -118,7 +119,8 @@ private fun LoginScreenContent(
     siteError: String?,
     onRegisterClicked: () -> Unit,
     fullDate: String,
-    onDateChanged: (String) -> Unit
+    onDateChanged: (String) -> Unit,
+    birthdayError: String?
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -146,6 +148,10 @@ private fun LoginScreenContent(
         datepicker(
             initialDate = LocalDate.now(),
             title = "Pick a date",
+            allowedDateValidator = {
+                it <= LocalDate.now()
+                it.year <= LocalDate.now().year
+            }
         ) {
             pickedDate = it
         }
@@ -286,7 +292,9 @@ private fun LoginScreenContent(
                         else Icons.Outlined.KeyboardArrowDown,
                     contentDescription = null
                 )
-            }
+            },
+            isError = birthdayError != null,
+            errorMessage = birthdayError
         )
     }
 }
@@ -309,5 +317,6 @@ private fun Prev() {
         onEmailPrimaryStateChanged = {_, _ -> Unit},
         onPhonePrimaryStateChanged = {_, _ -> Unit},
         nameError = null, siteError = "not ok",
+        birthdayError = "hmmm"
     )
 }
